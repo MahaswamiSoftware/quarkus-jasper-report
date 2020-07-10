@@ -1,11 +1,16 @@
-# Getting started with Quarkus
+# Quarkus demo: Hibernate ORM and RESTEasy
 
-This is a minimal CRUD service exposing a couple of endpoints over REST.
+This is a minimal CRUD service exposing a couple of endpoints over REST,
+with a front-end based on Angular so you can play with it from your browser.
 
-Under the hood, this demo uses:
-
-- RESTEasy to expose the REST endpoints
-- REST-assured and JUnit 5 for endpoint testing
+While the code is surprisingly simple, under the hood this is using:
+ - RESTEasy to expose the REST endpoints
+ - Hibernate ORM to perform the CRUD operations on the database
+ - A PostgreSQL database; see below to run one via Docker
+ - ArC, the CDI inspired dependency injection tool with zero overhead
+ - The high performance Agroal connection pool
+ - Infinispan based caching
+ - All safely coordinated by the Narayana Transaction Manager
 
 ## Requirements
 
@@ -14,19 +19,23 @@ To compile and run this demo you will need:
 - JDK 1.8+
 - GraalVM
 
+In addition, you will need either a PostgreSQL database, or Docker to run one.
+
 ### Configuring GraalVM and JDK 1.8+
 
 Make sure that both the `GRAALVM_HOME` and `JAVA_HOME` environment variables have
 been set, and that a JDK 1.8+ `java` command is on the path.
 
-See the [Building a Native Executable guide](https://quarkus.io/guides/building-native-image-guide)
+See the [Building a Native Executable guide](https://quarkus.io/guides/building-native-image)
 for help setting up your environment.
 
-## Building the application
+## Building the demo
 
 Launch the Maven build on the checked out sources of this demo:
 
 > ./mvnw install
+
+## Running the demo
 
 ### Live coding with Quarkus
 
@@ -35,16 +44,10 @@ live coding. To try this out:
 
 > ./mvnw quarkus:dev
 
-This command will leave Quarkus running in the foreground listening on port 8080.
+In this mode you can make changes to the code and have the changes immediately applied, by just refreshing your browser.
 
-1. Visit the default endpoint: [http://127.0.0.1:8080](http://127.0.0.1:8080).
-    - Make a simple change to [src/main/resources/META-INF/resources/index.html](src/main/resources/META-INF/resources/index.html) file.
-    - Refresh the browser to see the updated page.
-2. Visit the `/hello` endpoint: [http://127.0.0.1:8080/hello](http://127.0.0.1:8080/hello)
-    - Update the response in [src/main/java/org/acme/quickstart/GreetingResource.java](src/main/java/org/acme/quickstart/GreetingResource.java). Replace `hello` with `hello there` in the `hello()` method.
-    - Refresh the browser. You should now see `hello there`.
-    - Undo the change, so the method returns `hello` again.
-    - Refresh the browser. You should now see `hello`.
+Hot reload works even when modifying your JPA entities.
+Try it! Even the database schema will be updated on the fly.
 
 ### Run Quarkus in JVM mode
 
@@ -57,11 +60,12 @@ First compile it:
 
 Then run it:
 
-> java -jar ./target/getting-started-1.0-SNAPSHOT-runner.jar
+> java -jar ./target/hibernate-orm-quickstart-1.0-SNAPSHOT-runner.jar
 
-Have a look at how fast it boots, or measure the total native memory consumption.
+Have a look at how fast it boots.
+Or measure total native memory consumption...
 
-### Run Quarkus as a native executable
+### Run Quarkus as a native application
 
 You can also create a native executable from this application without making any
 source code changes. A native executable removes the dependency on the JVM:
@@ -74,6 +78,25 @@ native executable:
 
 > ./mvnw install -Dnative
 
-After getting a cup of coffee, you'll be able to run this executable directly:
+After getting a cup of coffee, you'll be able to run this binary directly:
 
-> ./target/getting-started-1.0-SNAPSHOT-runner
+> ./target/hibernate-orm-quickstart-1.0-SNAPSHOT-runner
+
+Please brace yourself: don't choke on that fresh cup of coffee you just got.
+    
+Now observe the time it took to boot, and remember: that time was mostly spent to generate the tables in your database and import the initial data.
+    
+Next, maybe you're ready to measure how much memory this service is consuming.
+
+N.B. This implies all dependencies have been compiled to native;
+that's a whole lot of stuff: from the bytecode enhancements that Hibernate ORM
+applies to your entities, to the lower level essential components such as the PostgreSQL JDBC driver, the Undertow webserver.
+
+## See the demo in your browser
+
+Navigate to:
+
+<http://localhost:8080/index.html>
+
+Have fun, and join the team of contributors!
+```
