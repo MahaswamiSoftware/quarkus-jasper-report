@@ -4,4 +4,4 @@
 
 After getting a cup of coffee, you'll be able to run this binary directly:
 
-> ./target/hibernate-orm-quickstart-1.0-SNAPSHOT-runner
+> ./target/quarkus-jasper-report-1.0-SNAPSHOT-runner
