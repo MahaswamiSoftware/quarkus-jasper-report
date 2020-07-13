@@ -44,9 +44,9 @@ public class FruitResource {
     public Fruit[] get() throws Exception {
         String uuidToken = UUID.randomUUID().toString();
         String fileName = "report" + "_" + uuidToken + ".pdf";
-        String outputFileName = "../temp/generatedReport/" + fileName;
+        String outputFileName = "temp/generatedReport/" + fileName;
         Map<String, Object> parameters = new HashMap<>();
-        String jasperReportPath = "../temp/jasperReport/sample.jrxml";
+        String jasperReportPath = "temp/jasperReport/sample.jrxml";
         jasperReportGeneratorService.generatePdfReport(jasperReportPath, outputFileName, parameters);
         return entityManager.createNamedQuery("Fruits.findAll", Fruit.class)
                 .getResultList().toArray(new Fruit[0]);
